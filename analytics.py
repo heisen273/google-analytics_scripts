@@ -8,10 +8,11 @@ import httplib2
 from oauth2client import client
 from oauth2client import file
 from oauth2client import tools
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 DISCOVERY_URI = ('https://analyticsreporting.googleapis.com/$discovery/rest')
-CLIENT_SECRETS_PATH = 'client_secrets.json' # Path to client_secrets.json file.
+CLIENT_SECRETS_PATH = '/home/erowz/analytics_Script/client_secrets.json' # Path to client_secrets.json file.
 
 #global VIEW_ID
 global appname
@@ -38,7 +39,7 @@ def initialize_analyticsreporting():
   # If the credentials don't exist or are invalid run through the native client
   # flow. The Storage object will ensure that if successful the good
   # credentials will get written back to a file.
-  storage = file.Storage('analyticsreporting.dat')
+  storage = file.Storage('/home/erowz/analytics_Script/analyticsreporting.dat')
   credentials = storage.get()
   if credentials is None or credentials.invalid:
     credentials = tools.run_flow(flow, storage, flags)
@@ -90,7 +91,7 @@ def print_response(response,appname):
   
   now = datetime.datetime.now()
 
-  file = open('./SaveExtract/'+now.strftime("%Y%m%d")+"_"+appname+'.csv','w')
+  file = open('/home/erowz/analytics_Script/SaveExtract/'+now.strftime("%Y%m%d")+"_"+appname+'.csv','w')
   file.write('page;sessions\n')
   print('processing '+appname+'. . .')
   for report in response.get('reports', []):
@@ -100,7 +101,7 @@ def print_response(response,appname):
       dimensionHeaders = columnHeader.get('dimensions', [])
       metricHeaders = columnHeader.get('metricHeader', {}).get('metricHeaderEntries', [])
       rows = report.get('data', {}).get('rows', [])
-      print('ololo',report.get('nextPageToken'))
+      print(report.get('nextPageToken'))
       for row in rows:
         lst = []
         dimensions = row.get('dimensions', [])
@@ -193,9 +194,9 @@ if __name__ == '__main__':
   #yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
   
   #VIEW_ID = '122698944'
-  os.system('rm -rf ./SaveExtract/'+datetime.datetime.now().strftime("%Y%m"+"*"))
+  os.system('rm -rf /home/erowz/analytics_Script/SaveExtract/'+datetime.datetime.now().strftime("%Y%m"+"*"))
   views_lst = []
-  storage = file.Storage('analyticsreporting.dat')
+  storage = file.Storage('/home/erowz/analytics_Script/analyticsreporting.dat')
   credentials = storage.get()
   if credentials is None or credentials.invalid:
     credentials = tools.run_flow(flow, storage, flags)

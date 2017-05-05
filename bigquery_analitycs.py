@@ -1,8 +1,9 @@
 import os
 import datetime
 import subprocess
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
 yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-files = [f for f in os.listdir('./SaveExtract/') if  len(f.split('_'))>1 and f.split('_')[0] == datetime.datetime.now().strftime('%Y%m%d')]
+files = [f for f in os.listdir('/home/erowz/analytics_Script/SaveExtract/') if  len(f.split('_'))>1 and f.split('_')[0] == datetime.datetime.now().strftime('%Y%m%d')]
 print files
 
 def bq_loader(f,table):
